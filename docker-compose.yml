@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  Qemu:
+    privileged: true
+    image: aptman/qus
+    command: -s -- -p x86_64
+
+  minecraft:
+    image: itzg/minecraft-bedrock-server
+    volumes:
+      - minecraftdata:/data
+      - /home/ubuntu/Developer/Minecraft/data/server.properties:/data/server.properties
+      - /home/ubuntu/Developer/Minecraft/plugins:/plugins
+    ports:
+      - 19132:19132/udp
+    environment:
+      EULA: "TRUE"
+      TYPE: "BUKKIT"
+      OPS: "ButterNPants"
+      ENABLE_WHITELIST: "TRUE"
+      ENFORCE_WHITELIST: "TRUE"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    depends_on:
+      - Qemu
+volumes:
+  minecraftdata:
+    external: true
